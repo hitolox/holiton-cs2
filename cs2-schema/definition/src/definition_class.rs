@@ -1,7 +1,4 @@
-use std::{
-    self,
-    borrow::Cow,
-};
+use std::borrow::Cow;
 
 use serde::{
     Deserialize,
@@ -48,19 +45,19 @@ impl ClassDefinition {
         output.emit_line(&format!("pub struct {class_name} {{"))?;
         output.push_ident();
 
-        output.emit_line(&format!("#[field(offset = 0x00)]"))?;
-        output.emit_line(&format!("pub vtable: Ptr64<()>,"))?;
+        output.emit_line("#[field(offset = 0x00)]")?;
+        output.emit_line("pub vtable: Ptr64<()>,")?;
 
         self.offsets
             .iter()
             .try_for_each(|offset| offset.emit(mod_name, &self.class_name, output))?;
 
         output.pop_ident();
-        output.emit_line(&format!("}}"))?;
+        output.emit_line("}")?;
 
         for class in inheritance.get_inherited_classes(&ClassReference {
             class_name: self.class_name.clone(),
-            module_name: mod_name_from_schema_name(&mod_name).to_string(),
+            module_name: mod_name_from_schema_name(mod_name).to_string(),
         }) {
             output.emit_line(&format!(
                 "impl {}::{} for dyn {class_name} {{ }}",

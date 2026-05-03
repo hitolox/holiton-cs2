@@ -39,18 +39,18 @@ impl EnumDefinition {
         };
 
         output.emit_line(&format!("/* enum {} ({}) */", enum_name, self.enum_name))?;
-        output.emit_line(&format!("#[repr(transparent)]"))?;
-        output.emit_line(&format!("#[derive(Copy, Clone, Debug)]"))?;
+        output.emit_line("#[repr(transparent)]")?;
+        output.emit_line("#[derive(Copy, Clone, Debug)]")?;
         output.emit_line(&format!("pub struct {enum_name}({enum_type});"))?;
         output.emit_line(&format!("impl {enum_name} {{"))?;
         output.push_ident();
 
         self.members
             .iter()
-            .try_for_each(|offset| offset.emit(output, &enum_type, value_mask))?;
+            .try_for_each(|offset| offset.emit(output, enum_type, value_mask))?;
 
         output.pop_ident();
-        output.emit_line(&format!("}}"))?;
+        output.emit_line("}")?;
         output.emit_line(&format!("/* {} */", self.enum_name))?;
 
         Ok(())

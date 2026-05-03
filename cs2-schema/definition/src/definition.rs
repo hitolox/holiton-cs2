@@ -23,8 +23,8 @@ pub struct SchemaScope {
 }
 
 pub fn mod_name_from_schema_name(name: &str) -> &str {
-    if name.ends_with(".dll") {
-        &name[0..name.len() - 4]
+    if let Some(stripped) = name.strip_suffix(".dll") {
+        stripped
     } else if name == "!GlobalTypes" {
         "globals"
     } else {

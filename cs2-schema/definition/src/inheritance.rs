@@ -43,7 +43,7 @@ impl InheritanceMap {
                     module_name: mod_name_from_schema_name(&scope.schema_name).to_string(),
                 };
 
-                if let Some(inherits) = ClassReference::from_rs_path(&inherits) {
+                if let Some(inherits) = ClassReference::from_rs_path(inherits) {
                     mapping.insert(reference, inherits);
                 } else {
                     println!("Invalid class {}", inherits);
