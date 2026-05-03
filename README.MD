@@ -18,7 +18,7 @@ This project is mainly a fun example for exploring the Windows Kernel with [Rust
 # WARNING
 holiton is **not** a plug 'n play solution.  
 Instead holiton aims to achieve maximum stealth and stay invisible for other applications.  
-Please read [How to use](https://wiki.valth.run/getting-started/) carefully and try troubleshooting issues on your own.  
+Please read [How to use](https://wiki.holiton.run/getting-started/) carefully and try troubleshooting issues on your own.  
 
   
 # Features
@@ -26,7 +26,7 @@ Due to holiton being read-only (as of now), there are limitations on what featur
 Regardless of this limitation, holiton supports the following features:  
 
 - External radar  
-  Publish your game for everybody on https://radar.valth.run
+  Publish your game for everybody on https://radar.holiton.run
 - Player ESP  
   ESP with a lot of configuration possibilities like: `Skeleton`, `Boxes3D` and `Boxes2D` 
   - Configurable colors to distinguish between enemy and team players
@@ -50,11 +50,11 @@ To access holiton settings overlay press `PAUSE`.
 
 # How to use / Getting started
 Please follow this guide to get started:  
-https://wiki.valth.run/getting-started/
+https://wiki.holiton.run/getting-started/
 
 # Troubleshooting
-If you are having issues mapping the kernel driver or starting the controller, please take a look [here](https://wiki.valth.run/category/troubleshooting):  
-https://wiki.valth.run/category/troubleshooting
+If you are having issues mapping the kernel driver or starting the controller, please take a look [here](https://wiki.holiton.run/category/troubleshooting):  
+https://wiki.holiton.run/category/troubleshooting
   
 The issue you encounter is most likely covered. If you still have any questions or need assistance, feel free to checkout the official holiton Discord server ([click to join](https://discord.gg/ecKbpAPW5T)).
 
