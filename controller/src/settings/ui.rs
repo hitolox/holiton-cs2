@@ -107,6 +107,7 @@ enum GrenadeHelperTransferDirection {
     Import,
 }
 
+#[allow(dead_code)]
 enum GrenadeHelperTransferState {
     /// Currently no transfer in progress
     Idle,
@@ -196,14 +197,13 @@ impl SettingsUI {
             .build(|| {
                 {
                     for (text, color) in [
-                        ("V", [0.81, 0.69, 0.06, 1.0]),
-                        ("a", [0.84, 0.61, 0.15, 1.0]),
-                        ("l", [0.86, 0.52, 0.24, 1.0]),
-                        ("t", [0.89, 0.44, 0.33, 1.0]),
-                        ("h", [0.92, 0.36, 0.41, 1.0]),
-                        ("r", [0.95, 0.27, 0.50, 1.0]),
-                        ("u", [0.97, 0.19, 0.59, 1.0]),
-                        ("n", [1.00, 0.11, 0.68, 1.0]),
+                        ("H", [1.00, 0.00, 0.00, 1.0]),
+                        ("O", [0.90, 0.00, 0.00, 1.0]),
+                        ("L", [0.80, 0.00, 0.00, 1.0]),
+                        ("I", [0.69, 0.00, 0.00, 1.0]),
+                        ("T", [0.59, 0.00, 0.00, 1.0]),
+                        ("O", [0.49, 0.00, 0.00, 1.0]),
+                        ("N", [0.38, 0.00, 0.00, 1.0]),
                     ] {
                         ui.text_colored(color, text);
                         ui.same_line();
@@ -229,14 +229,14 @@ impl SettingsUI {
                         ui.separator();
 
                         ui.text(obfstr!("Join our discord:"));
-                        ui.text_colored([0.18, 0.51, 0.97, 1.0], obfstr!("https://discord.gg/ecKbpAPW5T"));
+                        ui.text_colored([0.18, 0.51, 0.97, 1.0], obfstr!("https://discord.gg/ecKdpAPW5T"));
                         if ui.is_item_hovered() {
                             ui.set_mouse_cursor(Some(imgui::MouseCursor::Hand));
                         }
 
                         if ui.is_item_clicked() {
                             self.discord_link_copied = Some(Instant::now());
-                            ui.set_clipboard_text(obfstr!("https://discord.gg/ecKbpAPW5T"));
+                            ui.set_clipboard_text(obfstr!("https://discord.gg/ecKdpAPW5T"));
                         }
 
                         let show_copied = self.discord_link_copied.as_ref()
