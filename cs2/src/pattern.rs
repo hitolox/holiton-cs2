@@ -1,5 +1,3 @@
-use std::vec::Vec;
-
 pub trait SearchPattern {
     fn length(&self) -> usize;
     fn is_matching(&self, target: &[u8]) -> bool;
@@ -14,7 +12,7 @@ pub trait SearchPattern {
                 continue;
             }
 
-            return Some(index as usize);
+            return Some(index);
         }
 
         None
@@ -64,7 +62,7 @@ pub struct ByteSequencePattern {
 impl ByteSequencePattern {
     pub fn parse(pattern: &str) -> Option<ByteSequencePattern> {
         pattern
-            .split(" ")
+            .split(' ')
             .map(BytePattern::parse)
             .collect::<Option<Vec<_>>>()
             .map(|bytes| Self { bytes })
@@ -80,7 +78,6 @@ impl SearchPattern for ByteSequencePattern {
         self.bytes
             .iter()
             .zip(target.iter())
-            .find(|(pattern, value)| !pattern.matches_byte(**value))
-            .is_none()
+            .all(|(pattern, value)| pattern.matches_byte(*value))
     }
 }

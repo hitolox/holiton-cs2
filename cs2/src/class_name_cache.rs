@@ -93,6 +93,6 @@ impl ClassNameCache {
     }
 
     pub fn reverse_lookup(&self, name: &str) -> Option<u64> {
-        self.reverse_lookup.get(name).cloned()
+        self.reverse_lookup.get(name).copied()
     }
 }
