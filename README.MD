@@ -1,6 +1,6 @@
 ![holiton CS2 Logo](./img/HOLITON.svg)
 <p align="right">
-<a href="https://discord.gg/ecKbpAPW5T">
+<a href="https://discord.gg/ecKdpAPW5T">
 <img src="https://discordapp.com/api/guilds/1135362291311849693/widget.png?style=shield">
 </a>
 </p>
