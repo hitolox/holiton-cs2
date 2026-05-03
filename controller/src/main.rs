@@ -523,7 +523,7 @@ fn real_main(args: &AppArgs) -> anyhow::Result<()> {
 
     cs2.add_metrics_record(obfstr!("controller-status"), "initializing");
 
-    let mut app_state = StateRegistry::new(1024 * 8);
+    let app_state = StateRegistry::new(1024 * 8);
     app_state.set(StateCS2Handle::new(cs2.clone()), ())?;
     app_state.set(StateCS2Memory::new(cs2.create_memory_view()), ())?;
     app_state.set(settings, ())?;

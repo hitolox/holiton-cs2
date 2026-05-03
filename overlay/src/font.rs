@@ -85,7 +85,11 @@ impl FontAtlasBuilder {
             .map(|e| {
                 let name = e.name;
                 if name[0] == 0x00 {
-                    String::from_utf16be_lossy(name).to_string()
+                    let utf16: Vec<u16> = name
+                        .chunks_exact(2)
+                        .map(|c| u16::from_be_bytes([c[0], c[1]]))
+                        .collect();
+                    String::from_utf16_lossy(&utf16)
                 } else {
                     String::from_utf8_lossy(name).to_string()
                 }
@@ -155,7 +159,7 @@ impl FontAtlasBuilder {
         self.register_codepoints(value.chars().map(|c| c as u32));
     }
 
-    pub fn build_font_source(&self, size_pixels: f32) -> (Vec<FontSource>, GlyphRangeMemoryGuard) {
+    pub fn build_font_source(&self, size_pixels: f32) -> (Vec<FontSource<'_>>, GlyphRangeMemoryGuard) {
         let mut font_sources = Vec::with_capacity(self.fonts.len());
         let mut glyph_range_buffers: Vec<Vec<u32>> = Vec::with_capacity(self.fonts.len());
 

@@ -15,6 +15,7 @@ use cs2::{
     },
     CS2Handle,
     InterfaceError,
+    StateBuildInfo,
     StateCS2Handle,
     StateCS2Memory,
 };
@@ -68,7 +69,18 @@ fn main() -> anyhow::Result<()> {
     state.set(StateCS2Handle::new(cs2.clone()), ())?;
     state.set(StateCS2Memory::new(cs2.create_memory_view()), ())?;
 
-    let schema = cs2::create_dump(
+    // Registers the global cs2_schema_provider and predefined offsets in the
+    // registry. Required before any schema accessor (CSchemaSystem, etc.) is
+    // touched — without it field offsets are unresolved.
+    schema_runtime::setup(
+        &state,
+        &SetupOptions {
+            file: None,
+            fscache: None,
+        },
+    )?;
+
+    let schema = cs2::dump_schema_scopes(
         &state,
         if args.client_only {
             Some(&["client.dll", "!GlobalTypes"])
@@ -76,6 +88,8 @@ fn main() -> anyhow::Result<()> {
             None
         },
     )?;
+
+    let build_info = state.resolve::<StateBuildInfo>(())?;
 
     let output = File::options()
         .create(true)
@@ -89,8 +103,8 @@ fn main() -> anyhow::Result<()> {
     let absolute_path = path::absolute(&args.target_file).unwrap_or(args.target_file.clone());
     log::info!(
         "Schema for CS2 version {} ({}) dumped to {}",
-        schema.cs2_revision,
-        schema.cs2_build_datetime,
+        build_info.revision,
+        build_info.build_datetime,
         absolute_path.display()
     );
     Ok(())

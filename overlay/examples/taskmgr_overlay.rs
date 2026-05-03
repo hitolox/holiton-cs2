@@ -1,3 +1,6 @@
+use std::cell::Cell;
+use std::rc::Rc;
+
 use overlay::OverlayTarget;
 
 fn main() -> anyhow::Result<()> {
@@ -15,9 +18,20 @@ fn main() -> anyhow::Result<()> {
     let mut text_input = Default::default();
     let mut run_loop = true;
 
+    let capture_blocked = Rc::new(Cell::new(true));
+    let capture_dirty = Rc::new(Cell::new(true));
+    let cb_update = capture_blocked.clone();
+    let cd_update = capture_dirty.clone();
+    let cb_render = capture_blocked.clone();
+    let cd_render = capture_dirty.clone();
+
     overlay.main_loop(
-        |controller| {
+        move |controller| {
             controller.toggle_debug_overlay(true);
+            if cd_update.get() {
+                controller.toggle_screen_capture_visibility(!cb_update.get());
+                cd_update.set(false);
+            }
             true
         },
         move |ui, unicode_text| {
@@ -33,6 +47,16 @@ fn main() -> anyhow::Result<()> {
 
                     if ui.button("Close") {
                         run_loop = false
+                    }
+
+                    let label = if cb_render.get() {
+                        "Disable protection (allow capture)"
+                    } else {
+                        "Enable protection (block capture)"
+                    };
+                    if ui.button(label) {
+                        cb_render.set(!cb_render.get());
+                        cd_render.set(true);
                     }
 
                     unicode_text.text("Привет, мир!");
