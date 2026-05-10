@@ -1,0 +1,11 @@
+[package]
+name = "pack-assets"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "pack-assets"
+path = "src/main.rs"
+
+[dependencies]
+zip = { version = "2.2", default-features = false, features = ["deflate"] }

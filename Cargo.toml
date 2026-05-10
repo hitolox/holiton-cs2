@@ -19,6 +19,7 @@ members = [
     "overlay",
     "controller",
     "loader",
+    "tools/pack-assets",
 ]
 
 [workspace.package]
