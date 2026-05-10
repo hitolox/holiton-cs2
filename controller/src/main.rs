@@ -42,9 +42,6 @@ use enhancements::{
 };
 use imgui::{
     Condition,
-    FontConfig,
-    FontId,
-    FontSource,
     Key,
     Ui,
 };
@@ -130,28 +127,7 @@ pub struct UpdateContext<'a> {
     pub cs2: &'a Arc<CS2Handle>,
 }
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub struct FontReference {
-    inner: Arc<RefCell<Option<FontId>>>,
-}
-
-impl FontReference {
-    pub fn font_id(&self) -> Option<FontId> {
-        self.inner.borrow().clone()
-    }
-
-    pub fn set_id(&self, font_id: FontId) {
-        *self.inner.borrow_mut() = Some(font_id);
-    }
-}
-
-#[derive(Clone, Default)]
-pub struct AppFonts {
-    holiton: FontReference,
-}
-
 pub struct Application {
-    pub fonts: AppFonts,
     pub app_state: StateRegistry,
 
     pub cs2: Arc<CS2Handle>,
@@ -563,29 +539,10 @@ fn real_main(args: &AppArgs) -> anyhow::Result<()> {
         .context("missing cvar sensitivity")?;
 
     log::debug!("Initialize overlay");
-    let app_fonts: AppFonts = Default::default();
     let overlay_options = OverlayOptions {
         title: obfstr!("CS2 Overlay").to_string(),
         target: OverlayTarget::WindowOfProcess(cs2.process_id() as u32),
-        register_fonts_callback: Some(Box::new({
-            let app_fonts = app_fonts.clone();
-
-            move |atlas| {
-                let font_size = 18.0;
-                let holiton_font = atlas.add_font(&[FontSource::TtfData {
-                    data: include_bytes!("../resources/Holiton-Regular.ttf"),
-                    size_pixels: font_size,
-                    config: Some(FontConfig {
-                        rasterizer_multiply: 1.5,
-                        oversample_h: 4,
-                        oversample_v: 4,
-                        ..FontConfig::default()
-                    }),
-                }]);
-
-                app_fonts.holiton.set_id(holiton_font);
-            }
-        })),
+        register_fonts_callback: None,
     };
 
     let mut overlay = match overlay::init(overlay_options) {
@@ -619,7 +576,6 @@ fn real_main(args: &AppArgs) -> anyhow::Result<()> {
     }
 
     let app = Application {
-        fonts: app_fonts,
         app_state,
 
         cs2: cs2.clone(),

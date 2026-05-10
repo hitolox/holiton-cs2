@@ -32,7 +32,6 @@ const APP_MANIFEST: &'static str = r#"
 fn main() -> io::Result<()> {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=resources/app-icon.ico");
-    println!("cargo:rerun-if-changed=resources/Holiton-Regular.ttf");
     println!("cargo:rerun-if-changed=../.git/HEAD");
 
     {
