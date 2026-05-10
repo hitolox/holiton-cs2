@@ -183,13 +183,6 @@ impl SettingsUI {
         ui: &imgui::Ui,
         unicode_text: &UnicodeTextRenderer,
     ) {
-        let content_font = ui.current_font().id();
-        let _title_font = if let Some(font_id) = app.fonts.holiton.font_id() {
-            ui.push_font(font_id)
-        } else {
-            return;
-        };
-
         ui.window(obfstr!("holiton"))
             .size([650.0, 300.0], Condition::FirstUseEver)
             .size_constraints([650.0, 300.0], [2000.0, 2000.0])
@@ -213,7 +206,6 @@ impl SettingsUI {
                     ui.dummy([0.0, 5.0]);
                 }
 
-                let _content_font = ui.push_font(content_font);
                 let mut settings = app.settings_mut();
 
                 if let Some(_tab_bar) = ui.tab_bar("main") {
