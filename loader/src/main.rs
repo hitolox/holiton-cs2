@@ -344,11 +344,25 @@ fn run() -> Result<(), String> {
 
         map_driver(&dir)?;
 
-        // Re-check after mapping.
+        // kdmapper exited 0, but a successful exit is not the same as a successfully
+        // mapped module — kdmapper reports success even when the driver was loaded but
+        // immediately rejected at IRP_MJ_CREATE / DriverEntry. Re-scan loaded modules
+        // and warn the user explicitly so they're not left to debug a vague controller
+        // error a few seconds later.
         if !is_kernel_driver_loaded() {
-            // Some driver names cannot be observed by EnumDeviceDrivers.
-            // Treat a successful kdmapper exit as good and continue — controller.exe
-            // will surface a clear error if the driver really did not load.
+            let proceed = ask_yes_no(
+                "kdmapper reported success but the Holiton kernel module is not visible \
+                 in the loaded driver list.\n\n\
+                 This is usually harmless — some manually-mapped drivers do not appear \
+                 in EnumDeviceDrivers. Occasionally it means the driver was unloaded \
+                 immediately after mapping (e.g. a DriverEntry failure).\n\n\
+                 Launch the controller anyway?\n\n\
+                 (If the controller crashes with a driver-related error, retry the \
+                 loader — it will offer to re-map.)",
+            );
+            if !proceed {
+                return Ok(());
+            }
         }
     }
 
