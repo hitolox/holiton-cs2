@@ -5,10 +5,13 @@ mod download;
 use std::{
     env,
     ffi::OsStr,
+    fs::OpenOptions,
+    io::Write,
     mem,
     os::windows::ffi::OsStrExt,
     path::{Path, PathBuf},
     ptr,
+    time::{SystemTime, UNIX_EPOCH},
 };
 
 use windows::{
@@ -37,6 +40,7 @@ use windows::{
 };
 
 const APP_TITLE: PCWSTR = w!("Holiton Loader");
+const LOG_FILE_NAME: &str = "holiton-loader.log";
 
 const CONTROLLER_NAME: &str = "controller.exe";
 const DRIVER_DLL_NAME: &str = "driver_interface_kernel.dll";
@@ -70,7 +74,32 @@ fn message_box(text: &str, flags: MESSAGEBOX_STYLE) -> i32 {
 }
 
 fn show_error(text: &str) {
+    write_error_log(text);
     let _ = message_box(text, MB_OK | MB_ICONERROR);
+}
+
+/// Append the error message to `holiton-loader.log` next to the loader exe.
+/// Best-effort — silently swallows IO errors so a failing log write never
+/// hides the real problem from the user.
+fn write_error_log(text: &str) {
+    let path = loader_dir().join(LOG_FILE_NAME);
+
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0);
+
+    let mut file = match OpenOptions::new().create(true).append(true).open(&path) {
+        Ok(f) => f,
+        Err(_) => return,
+    };
+
+    let _ = writeln!(
+        file,
+        "[unix:{}] ERROR\n{}\n----",
+        timestamp,
+        text.trim_end()
+    );
 }
 
 fn ask_yes_no(text: &str) -> bool {
