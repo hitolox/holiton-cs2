@@ -1,72 +1,74 @@
-![holiton CS2 Logo](./img/logo.svg)
-<p align="right">
-<a href="https://discord.gg/ecKdpAPW5T">
-<img src="https://discordapp.com/api/guilds/1135362291311849693/widget.png?style=shield">
-</a>
-</p>
+![Holiton CS2 Logo](./img/logo.svg)
 
-holiton is an open source external Counter-Strike 2 read only kernel-level gameplay enhancer.  
-That's a lot of descriptive words, but what does each of them mean?  
-- `holiton` The name of this project
-- `open source` This application is open source and for everyone to learn from
-- `external` We do not inject any DLLs into the target process
-- `read only` We do not write to the CS2 process in any way, therefore being impossible to detect by scanning the process memory
-- `kernel` We do not use any user level WinAPIs in order to get information from the CS2 process
-  
-This project is mainly a fun example for exploring the Windows Kernel with [Rust](https://www.rust-lang.org) and exploring the world of game enhancements :)
+Holiton is an open-source external Counter-Strike 2 read-only kernel-level gameplay enhancer.
+
+That's a lot of descriptive words — what does each one mean?
+
+- **Holiton** — the name of this project
+- **open source** — the application is open source so anyone can read, learn from and audit it
+- **external** — no DLLs are injected into the target process
+- **read only** — Holiton never writes to the CS2 process, so it cannot be detected by scanning the process memory
+- **kernel** — kernel-level memory access; no user-mode WinAPIs are used to read CS2
+
+This project is mainly a fun example for exploring the Windows kernel with [Rust](https://www.rust-lang.org) and the world of game enhancements.
+
+# Looking for the ready-to-run build?
+
+Source code lives here. If you just want to download and run Holiton, grab it from the distribution repo:
+
+**[github.com/hitolox/holiton-loader-cs2](https://github.com/hitolox/holiton-loader-cs2)**
+
+That repo ships `holiton-loader.exe`, which prepares the environment, fetches the kernel components on first run and launches the controller.
 
 # WARNING
-holiton is **not** a plug 'n play solution.  
-Instead holiton aims to achieve maximum stealth and stay invisible for other applications.  
-Please read [How to use](https://wiki.holiton.run/getting-started/) carefully and try troubleshooting issues on your own.  
 
-  
+Holiton is **not** a plug-and-play solution. It aims for stealth and stays invisible to other applications, which means it requires careful setup:
+
+- **Windows Defender must be disabled and the Holiton folder excluded.** `kdmapper.exe` is detected as `HackTool:Win32/Kdmapper` by every antivirus and will be silently quarantined.
+- **HVCI (Memory Integrity) must be off** in Settings → Privacy & security → Windows Security → Device security → Core isolation.
+- **Microsoft Vulnerable Driver Blocklist must be off** (same panel).
+- **Administrator rights** are required to map the kernel driver — the loader requests them via UAC.
+
+The full setup walkthrough is in the [loader repo's README](https://github.com/hitolox/holiton-loader-cs2#readme).
+
 # Features
-Due to holiton being read-only (as of now), there are limitations on what features are possible to implement (eg. skin changer).
-Regardless of this limitation, holiton supports the following features:  
 
-- External radar  
-  Publish your game for everybody on https://radar.holiton.run
-- Player ESP  
-  ESP with a lot of configuration possibilities like: `Skeleton`, `Boxes3D` and `Boxes2D` 
-  - Configurable colors to distinguish between enemy and team players
-  - ESP includes player health, a health bar, weapon and a lot more
-- Bomb Info
-  - Time until the bomb detonation
-  - Defuser info such as a defuse timer
-  - Bomb site where the bomb is located
-- Trigger Bot  
-  Shoot your enemy (or team mates) as soon they enter your crosshair
-- Spectator info
-  - List of player currently watching you / the observer target
-- Stream proof by default  
-  Never show your holiton overlay on any screen shares
+Because Holiton is read-only there are limits on what can be implemented (no skin changer, for example). It currently supports:
 
-To access holiton settings overlay press `PAUSE`.
+- **External radar** — publish your match to a web client
+- **Player ESP** — `Skeleton`, `Boxes3D`, `Boxes2D`, configurable colours per team, health bar, weapon, distance
+- **Bomb info** — defuse timer, plant site, time-to-detonation
+- **Spectator list** — see who is observing you / your observer target
+- **Trigger bot** — shoots the moment a target enters the crosshair
+- **Sniper crosshair**, **bomb label**, **anti-aim punish**, **grenade helper**
+- **Stream-proof by default** — the overlay never appears in screen shares or recordings
 
-## Planned Features
+Press `PAUSE` in-game to open the Holiton overlay menu.
+
+## Planned features
+
 - Aimbot
 - Player competitive ranks / wins
 
-# How to use / Getting started
-Please follow this guide to get started:  
-https://wiki.holiton.run/getting-started/
+# Building from source
 
-# Troubleshooting
-If you are having issues mapping the kernel driver or starting the controller, please take a look [here](https://wiki.holiton.run/category/troubleshooting):  
-https://wiki.holiton.run/category/troubleshooting
-  
-The issue you encounter is most likely covered. If you still have any questions or need assistance, feel free to checkout the official holiton Discord server ([click to join](https://discord.gg/ecKbpAPW5T)).
+```bash
+git clone https://github.com/hitolox/holiton-cs2.git
+cd holiton-cs2
+cargo build --release -p controller
+```
+
+The compiled binary lands at `target/release/controller.exe`. The loader is built the same way: `cargo build --release -p holiton-loader`.
+
+The C runtime is statically linked (`+crt-static` in `.cargo/config.toml`), so the resulting binaries run on a fresh Windows install without VC++ Redistributable.
 
 # VAC
-The same considerations as mentioned in [this link](https://github.com/dretax/GarHal_CSGO#starting-driver) have been taken into account.  
-With these precautions and some minor improvements, such as omitting the holiton identifier and using xor encryption for strings, the driver/overlay should avoid VAC detection. However, I must clarify that I haven't extensively studied VAC, so my conclusion is speculative. Personally, I have been using a C based driver/overlay like this with CSGO for several years without ever getting VAC banned. But be aware of overwatch!  
-With VAC live being enabled now, use this with caution. As always take the necessary precautions into consideration.
+
+The same considerations [discussed here](https://github.com/dretax/GarHal_CSGO#starting-driver) have been taken into account. With those precautions and some additional measures — omitting the project identifier from kernel-visible strings and XOR-encrypting strings — the driver/overlay aims to avoid VAC detection.
+
+That said, I haven't extensively studied VAC and these conclusions are partly speculative. Personally I've used C-based driver/overlay setups like this with CS:GO for years without a VAC ban — but Overwatch is a separate vector, and VAC Live is now active. **Use at your own risk and take the necessary precautions.**
 
 # Screenshots
+
 ![](./img/showcase_01.png)
 ![](./img/showcase_02.png)
-
-# Help
-You can find help on the official holiton Discord server:  
-[![Discord Shield](https://discordapp.com/api/guilds/1135362291311849693/widget.png?style=shield)](https://discord.gg/ecKbpAPW5T)
