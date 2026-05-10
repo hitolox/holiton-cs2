@@ -573,7 +573,7 @@ fn real_main(args: &AppArgs) -> anyhow::Result<()> {
             move |atlas| {
                 let font_size = 18.0;
                 let holiton_font = atlas.add_font(&[FontSource::TtfData {
-                    data: include_bytes!("../resources/Valthrun-Regular.ttf"),
+                    data: include_bytes!("../resources/Holiton-Regular.ttf"),
                     size_pixels: font_size,
                     config: Some(FontConfig {
                         rasterizer_multiply: 1.5,
