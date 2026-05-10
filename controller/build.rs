@@ -12,7 +12,7 @@ use winres::WindowsResource;
 
 const APP_MANIFEST: &'static str = r#"
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
-  <description>holiton Overlay</description>
+  <description>Holiton Overlay</description>
   <assemblyIdentity type="win32" name="dev.wolveringer.holiton.overlay" version="0.4.5.0" />
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
       <security>

@@ -5,3 +5,10 @@ _*
 .idea
 kernel
 docs
+
+# Local build staging
+/dist/
+
+# Stray cargo build artifacts that occasionally land at the repo root
+/cs2-schema-dumper-*/
+/output-bin-*

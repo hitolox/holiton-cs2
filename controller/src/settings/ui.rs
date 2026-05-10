@@ -212,8 +212,8 @@ impl SettingsUI {
                     if let Some(_tab) = ui.tab_item("Information") {
                         let build_info = app.app_state.resolve::<StateBuildInfo>(()).ok();
 
-                        ui.text(obfstr!("holiton an open source CS2 external read only kernel gameplay enhancer."));
-                        ui.text(&format!("{} Version {} ({})", obfstr!("holiton"), VERSION, env!("BUILD_TIME")));
+                        ui.text(obfstr!("Holiton — an open source CS2 external read-only kernel gameplay enhancer."));
+                        ui.text(&format!("{} Version {} ({})", obfstr!("Holiton"), VERSION, env!("BUILD_TIME")));
                         ui.text(&format!("{} Version {} ({})", obfstr!("CS2"), build_info.as_ref().map_or("error", |info| &info.revision), build_info.as_ref().map_or("error", |info| &info.build_datetime)));
 
                         let ydummy = ui.window_size()[1] - ui.cursor_pos()[1] - ui.text_line_height_with_spacing() * 2.0 - 12.0;
@@ -341,13 +341,13 @@ impl SettingsUI {
                     }
 
                     if let Some(_) = ui.tab_item("Web Radar") {
-                        ui.text(obfstr!("The holiton Web Radar has been moved into an own application which runs outside of the holiton CS2 overlay."));
+                        ui.text(obfstr!("The Holiton Web Radar has been moved into an own application which runs outside of the Holiton CS2 overlay."));
                         ui.text(obfstr!("More information on how to run the CS2 web radar can be found here:"));
                         ui.text(obfstr!("https://wiki.valth.run/link/6"));
                     }
 
                     if let Some(_) = ui.tab_item("Misc") {
-                        ui.checkbox(obfstr!("holiton Watermark"), &mut settings.holiton_watermark);
+                        ui.checkbox(obfstr!("Holiton Watermark"), &mut settings.holiton_watermark);
 
                         if ui.checkbox(obfstr!("Hide overlay from screen capture"), &mut settings.hide_overlay_from_screen_capture) {
                             app.settings_screen_capture_changed.store(true, Ordering::Relaxed);
@@ -1791,7 +1791,7 @@ impl SettingsUI {
                         Box::new(move || {
                             // GrenadeHelperTransferState
                             let Some(target_path) = rfd::FileDialog::new()
-                                .add_filter("holiton Grenade Spots", &["vgs"])
+                                .add_filter("Holiton Grenade Spots", &["vgs"])
                                 .save_file()
                             else {
                                 return Ok(GrenadeHelperTransferState::Idle);
@@ -1813,7 +1813,7 @@ impl SettingsUI {
                         Box::new(move || {
                             // GrenadeHelperTransferState
                             let Some(target_path) = rfd::FileDialog::new()
-                                .add_filter("holiton Grenade Spots", &["vgs"])
+                                .add_filter("Holiton Grenade Spots", &["vgs"])
                                 .pick_file()
                             else {
                                 return Ok(GrenadeHelperTransferState::Idle);

@@ -342,7 +342,7 @@ impl Application {
             .position_pivot([0.5, 0.5])
             .build(|| {
                 ui.text("We detected you pressed the \"INSERT\" key.");
-                ui.text("If you meant to open the holiton Overlay please use the \"PAUSE\" key.");
+                ui.text("If you meant to open the Holiton Overlay please use the \"PAUSE\" key.");
                 ui.dummy([0.0, 2.5]);
                 ui.separator();
                 ui.dummy([0.0, 2.5]);
@@ -372,7 +372,7 @@ impl Application {
         if settings.holiton_watermark {
             {
                 let text_buf;
-                let text = obfstr!(text_buf = "holiton Overlay");
+                let text = obfstr!(text_buf = "Holiton Overlay");
 
                 ui.set_cursor_pos([
                     ui.window_size()[0] - ui.calc_text_size(text)[0] - 10.0,
@@ -466,7 +466,7 @@ fn real_main(args: &AppArgs) -> anyhow::Result<()> {
     let build_info = version_info()?;
     log::info!(
         "{} v{} ({}). Windows build {}.",
-        obfstr!("holiton"),
+        obfstr!("Holiton"),
         env!("CARGO_PKG_VERSION"),
         env!("GIT_HASH"),
         build_info.dwBuildNumber
@@ -513,7 +513,7 @@ fn real_main(args: &AppArgs) -> anyhow::Result<()> {
             ]
             .join("\n");
 
-            let result = dialog::show_yes_no(obfstr!("holiton"), &message, false);
+            let result = dialog::show_yes_no(obfstr!("Holiton"), &message, false);
             if !result {
                 log::info!("{}", obfstr!("Aborting launch due to user input."));
                 return Ok(());

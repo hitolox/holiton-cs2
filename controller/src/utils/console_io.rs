@@ -15,6 +15,6 @@ pub fn show_critical_error(message: &str) {
     }
 
     if !is_console_invoked() {
-        overlay::show_error_message(obfstr!("holiton Controller"), message);
+        overlay::show_error_message(obfstr!("Holiton Controller"), message);
     }
 }
