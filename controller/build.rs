@@ -30,6 +30,11 @@ const APP_MANIFEST: &'static str = r#"
 "#;
 
 fn main() -> io::Result<()> {
+    println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=resources/app-icon.ico");
+    println!("cargo:rerun-if-changed=resources/Holiton-Regular.ttf");
+    println!("cargo:rerun-if-changed=../.git/HEAD");
+
     {
         let git_hash = if Path::new("../.git").exists() {
             match { Command::new("git").args(&["rev-parse", "HEAD"]).output() } {
